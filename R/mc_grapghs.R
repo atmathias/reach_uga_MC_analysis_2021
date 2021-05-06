@@ -7,86 +7,50 @@ library(tidyverse)
 df_farmers_use_tillage <- tibble(response= c("Yes", "Yes"), 
                                  perc_respondents  = c(27/(27+293)*100,
                                                        461/(461+56)*100),
-                                                       
                                 phase = c("Baseline", "Endline")
+) %>% mutate(
+  perc_respondents = round(perc_respondents, 0)
 )
 
-round(df_farmers_use_tillage$perc_respondents, 0)
-
 df_farmers_use_tillage %>% 
-  ggplot(aes(fill = phase, x= fct_reorder(response, perc_respondents), y= perc_respondents)) +
-  geom_bar(position = "dodge", stat = "identity", width = 1) +
+ggplot(aes(fill=phase, x= fct_reorder(response, perc_respondents), y = perc_respondents)) +
+  geom_bar(position = "dodge", stat = "identity", width = 0.5) +
   scale_fill_manual(values = c("#303434", "#00aeef"))+
-  ylim(0, 100) +
   theme_bw() +
+  ylim(0, 90)+
   geom_text(aes(label = scales::percent(perc_respondents/100, 
                                         accuracy = 1, trim = TRUE), vjust = -.5),
-            position = position_dodge2(width = .4)) +
+            position = position_dodge2(width = 0.5))+
   theme(text= element_text(size= 12), legend.title= element_blank(), 
         panel.grid.major.y = element_blank(), panel.grid.major.x = element_blank(), 
         axis.text = element_blank(),
         axis.title.x = element_blank(),
-                axis.ticks = element_blank())+
-  labs(y = "Percentage  of respondents")+
-  labs(title= "Proportion of respondents using tillage service", 
+        axis.ticks = element_blank())+
+  labs(title= "Proportion of respondents using subsidized tillage services ", 
        subtitle = "n baseline: 320, n endline:517", x= element_blank(),
        y = element_blank())
-
-
-# land ownership status
-df_land_own_status <- tibble(phase = c("Baseline", "Endline", "Baseline", "Endline", "Baseline",
-                                       "Endline", "Baseline", "Endline", "Baseline", "Endline"),
-                             perc_respondents = c(49, 44, 23, 18, 12, 7, 0, 31, 16, 0),
-                             status = c("Owned", "Owned", "Rented", "Rented", "Borrowed",
-                                       "Borrowed", "Given for free", "Given for free", "Other", "Other")
-                             
-                                 )
-
-df_land_own_status %>% 
-  arrange(perc_respondents) %>%
-  mutate(status = factor(status, levels=c("Other", "Given for free", "Borrowed", "Rented", "Owned"))) %>% 
-  
-  ggplot(aes(fill = phase, x= status,
-             y = perc_respondents)) +
-  
-  geom_bar(position = "dodge", stat = "identity") +
-  labs(title = "Proportion of respondents by land ownership status",
-       subtitle = "n baseline: 644, n endline:738") +
-  scale_fill_manual(values = c("#303434", "#00aeef"))+
-  theme_bw() +
-  theme(text= element_text(size= 12), legend.title= element_blank(), 
-        panel.grid.major.y = element_blank(), panel.grid.major.x = element_blank(), 
-        axis.text.y = element_text(angle = 0, hjust=1),
-        axis.title = element_blank())+
-  labs(x = "Percentage  of respondents") +
-  coord_flip() +
-  scale_y_continuous(labels = function(x) paste0(x, "%"), breaks = seq(0, 50, by = 5)) 
-
 
 
 # respondents planting crops outside the settlement
 df_plant_out <- tibble(response= c("Yes", "Yes"), 
                        perc_respondents  = c(74, 76), 
-                       phases = c("Baseline", "Endline")
+                       phase = c("Baseline", "Endline")
 )
 
 df_plant_out %>% 
-  ggplot(aes(fill=phases, x= fct_reorder(response, -perc_respondents), y = perc_respondents)) +
-  geom_bar(position = "dodge", stat = "identity") +
-  labs(title = paste(" Proportion of respondents planting crops outside the settlement",
-                     subtittle = "n baseline: 321, n endline:492")) +
+  ggplot(aes(fill=phase, x= fct_reorder(response, -perc_respondents), y = perc_respondents)) +
+  geom_bar(position = "dodge", stat = "identity", width = 0.5) +
   scale_fill_manual(values = c("#303434", "#00aeef"))+
   theme_bw() +
   ylim(0, 80) +
   geom_text(aes(label = scales::percent(perc_respondents/100, 
                                         accuracy = 1, trim = TRUE), vjust = -.5),
-            position = position_dodge2(width = .9))+
+            position = position_dodge2(width = 0.5))+
   theme(text= element_text(size= 12), legend.title= element_blank(), 
         panel.grid.major.y = element_blank(), panel.grid.major.x = element_blank(), 
-        axis.text.x = element_text(angle = 0, hjust = 1),
+        axis.text = element_blank(),
         axis.title.x = element_blank(),
-        axis.ticks = element_blank(),
-        axis.text.y = element_blank())+
+        axis.ticks = element_blank())+
   labs(title= "Proportion of respondents planting crops outside the settlement", 
        subtitle = "n baseline: 321, n endline:492", x= element_blank(),
        y = element_blank()) 
@@ -103,13 +67,13 @@ df_time_to_farm <- tibble(phase = c("Baseline", "Endline", "Baseline", "Endline"
 
 df_time_to_farm %>% 
   ggplot(aes(fill = phase, x= fct_reorder(time_farm, -perc_respondents), y= perc_respondents)) +
-  geom_bar(position = "dodge", stat = "identity") +
+  geom_bar(position = "dodge", stat = "identity", width = .5) +
   scale_fill_manual(values = c("#303434", "#00aeef"))+
   ylim(0, 60) +
   theme_bw() +
   geom_text(aes(label = scales::percent(perc_respondents/100, 
                                         accuracy = 1, trim = TRUE), vjust = -.5),
-            position = position_dodge2(width = .9))+
+            position = position_dodge2(width = .5))+
   theme(text= element_text(size= 12), legend.title= element_blank(), 
         panel.grid.major.y = element_blank(), panel.grid.major.x = element_blank(), 
         axis.text.x = element_text(angle = 45, hjust = 1),
@@ -119,9 +83,11 @@ df_time_to_farm %>%
   labs(y = "Percentage  of respondents")+
   labs(title= "Proportion of respondents by distance taken to reach farmland",
        subtitle = "n baseline: 230, n endline:527", x= element_blank(),
-       y = element_blank()) 
-
+       y = element_blank())
+  
+  
 # ways of acquiring land
+
 df_land_acquisition <- tibble(phase = c("Baseline", "Endline", "Baseline", "Endline", "Baseline",
                                         "Endline", "Baseline", "Endline"),
                               perc_respondents = c(2, 9, 19, 26, 47, 24, 32, 41),
@@ -129,36 +95,31 @@ df_land_acquisition <- tibble(phase = c("Baseline", "Endline", "Baseline", "Endl
                                          "Informal agreement with host farmer", "Rented land from host community", 
                                          "Rented land from host community", "Other", "Other")
                               
-                            )
+)
 df_land_acquisition %>% 
   arrange(perc_respondents) %>%
-  mutate(method = factor(method, levels=c("Rented land from host community", 
-                                          "Informal agreement with host farmer", 
-                                          "Given by OPM", "Other"))) %>% 
+  mutate(method = factor(method, levels=c("Other", "Given by OPM", "Informal agreement with host farmer",
+                                          "Rented land from host community"
+  ))) %>% 
   
   ggplot(aes(fill = phase, x= method,
              y = perc_respondents)) +
-
+  
   geom_bar(position = "dodge", stat = "identity") +
-  labs(title = paste("Proportion of respondensts by method of acquiring land for planting outside the settlement",
-                     subtitle = "n baseline: 232, n endline:527")) +
+  labs(title = "Proportion of respondensts by method of acquiring \n land for planting outside the settlement",
+       subtitle = "n baseline: 232, n endline:527" , width = .5) +
   scale_fill_manual(values = c("#303434", "#00aeef"))+
-  ylim(0, 50)+
-  theme_bw()+
-  geom_text(aes(label = scales::percent(perc_respondents/100, 
-                                        accuracy = 1, trim = TRUE), vjust = -.5),
-            position = position_dodge2(width = .9))+
+  theme_bw() +
   theme(text= element_text(size= 12), legend.title= element_blank(), 
         panel.grid.major.y = element_blank(), panel.grid.major.x = element_blank(), 
-        axis.text.x = element_text(angle = 45, hjust = 1),
-        axis.title.x = element_blank(),
-        axis.text.y = element_blank(),
-        axis.ticks = element_blank()) +
-  labs(y = "Percentage  of respondents")+
-  labs(ggtitle= "Proportion of respondensts by method of acquiring land for planting outside the settlement",
-       subtitle = "n baseline: 232, n endline:527", x= element_blank(),
-       y = element_blank())
-
+        axis.text.y = element_text(angle = 0, hjust=1),
+        axis.title = element_blank())+
+  labs(x = "Percentage  of respondents") +
+  coord_flip() +
+  scale_y_continuous(labels = function(x) paste0(x, "%"), breaks = seq(0, 50, by = 5))+
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 15))
+  
+  
 
 # cost of tillage per acre
 df_tillage_cost <- tibble(phase = c("Baseline", "Endline", "Baseline", "Endline", "Baseline",
@@ -179,8 +140,8 @@ df_tillage_cost %>%
              y = perc_respondents)) +
 
   geom_bar(position = "dodge", stat = "identity") +
-  labs(title = "Proportion of respondents by cost of tilling land per acre",
-       subtitle = "n baseline: 232, n endline:527") +
+  labs(title = "Proportion of respondents by cost of tillage per acre",
+       subtitle = "n baseline: 232, n endline:527", width = .5) +
   scale_fill_manual(values = c("#303434", "#00aeef"))+
   theme_bw() +
   theme(text= element_text(size= 12), legend.title= element_blank(), 
@@ -189,7 +150,8 @@ df_tillage_cost %>%
         axis.title = element_blank())+
   labs(x = "Percentage  of respondents") +
   coord_flip() +
-  scale_y_continuous(labels = function(x) paste0(x, "%"), breaks = seq(0, 40, by = 5)) 
+  scale_y_continuous(labels = function(x) paste0(x, "%"), breaks = seq(0, 40, by = 5)) +
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 10))
 
 
 # sources of financing tillage payments
@@ -214,8 +176,8 @@ df_tillage_finance_source %>%
   ggplot(aes(fill = phase, x= finance_source,
              y = perc_respondents)) +
   geom_bar(position = "dodge", stat = "identity") +
-  labs(title = "Proportion of respondents by source of financing tillage payments",
-       subtitle = "n baseline: 204, n endline:462") +
+  labs(title = "Proportion of respondents by source of financing \n tillage payments",
+       subtitle = "n baseline: 204, n endline:462", width = .5) +
   scale_fill_manual(values = c("#303434", "#00aeef"))+
   theme_bw()+
   theme(text= element_text(size= 12), legend.title= element_blank(), 
@@ -224,7 +186,8 @@ df_tillage_finance_source %>%
         axis.title = element_blank())+
   coord_flip()+
   labs(y = "Percentage  of respondents") +
-  scale_y_continuous(labels = function(x) paste0(x, "%"), breaks = seq(0, 40, by = 5))
+  scale_y_continuous(labels = function(x) paste0(x, "%"), breaks = seq(0, 40, by = 5)) +
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 15))
   
 # Sources of information about farming practices and inputs
 
@@ -235,21 +198,21 @@ df_farming_information_source <- tibble(phase = c("Baseline", "Endline", "Baseli
                                         perc_respondents = c(27, 30, 21, 15, 10, 20, 14, 13, 11, 7, 8, 9, 5, 5, 2, 1),
                                         information_source = c("NGOs", "NGOs", "Friends", "Friends", "Agro-dealer", "Agro-dealer",
                                                                "Community group", "Community group", "Family", "Family", "Radio",
-                                                               "Radio", "Sub-county agric officer", "Sub-county agric officer", 
+                                                               "Radio", "Sub-county agricultural officer", "Sub-county agricultural officer", 
                                                                "Other", "Other")
                                                                           )
 
 
   df_farming_information_source %>% 
   arrange(perc_respondents) %>%
-  mutate(information_source = factor(information_source, levels=c("Other", "Sub-county agric officer", "Radio","Agro-dealer",
+  mutate(information_source = factor(information_source, levels=c("Other", "Sub-county agricultural officer", "Radio","Agro-dealer",
                                                                   "Family", "Community group", "Friends","NGOs" ))) %>%
 
   ggplot(aes(fill = phase, x= information_source,
              y = perc_respondents)) +  
   geom_bar(position = "dodge", stat = "identity") +
-  labs(title = "Proportion of respondents by source of information about farming practices and inputs",
-       subtitle = "n baseline: 320, n endline:527") +
+  labs(title = "Proportion of respondents by source of information \n about farming practices and inputs",
+       subtitle = "n baseline: 320, n endline:527", width = .5) +
   scale_fill_manual(values = c("#303434", "#00aeef"))+
   theme_bw() +
   theme(text= element_text(size= 12), legend.title= element_blank(), 
@@ -258,7 +221,8 @@ df_farming_information_source <- tibble(phase = c("Baseline", "Endline", "Baseli
         axis.title = element_blank())+
     labs(y = "Percentage  of respondents") +
   coord_flip()+
-  scale_y_continuous(labels = function(x) paste0(x, "%"), breaks = seq(0, 40, by = 5))
+  scale_y_continuous(labels = function(x) paste0(x, "%"), breaks = seq(0, 40, by = 5)) +
+    scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 10))
 
 
 # farmers benefiting from discounted rates of inputs and equipment
@@ -272,20 +236,20 @@ round(df_inputs_discount_beneficiaries$perc_respondents, 0)
 
 df_inputs_discount_beneficiaries %>% 
   ggplot(aes(fill = gender, x= fct_reorder(status, -perc_respondents), y= perc_respondents)) +
-  geom_bar(position = "dodge", stat = "identity") +
+  geom_bar(position = "dodge", stat = "identity", width = .5) +
   scale_fill_manual(values = c("#303434", "#00aeef"))+
   ylim(0, 60) +
   theme_bw() +
   geom_text(aes(label = scales::percent(perc_respondents/100, 
                                         accuracy = 1, trim = TRUE), vjust = -.5),
-            position = position_dodge2(width = .9)) +
+            position = position_dodge2(width = .5)) +
   theme(text= element_text(size= 12), legend.title= element_blank(), 
         panel.grid.major.y = element_blank(), panel.grid.major.x = element_blank(), 
         axis.text.x = element_text(angle = 0,hjust= 1),
         axis.ticks = element_blank(),
         axis.title.x = element_blank(),
         axis.text.y = element_blank())+
-  labs(title = "Gender distribution of respondents who benefited from discounted rates of inputs and equipment",
+  labs(title = "Gender distribution of respondents who benefited from \n discounted rates of inputs and equipment",
        subtitle = "Female(n): 2320, Male(n):1923", x= element_blank(),
        y = element_blank()) 
 
@@ -300,7 +264,7 @@ df_type_seed_purchased <- tibble(phase = c("Baseline", "Endline", "Baseline", "E
 
 df_type_seed_purchased %>% 
   ggplot(aes(fill = phase, x= fct_reorder(status, -perc_respondents), y= perc_respondents)) +
-  geom_bar(position = "dodge", stat = "identity") +
+  geom_bar(position = "dodge", stat = "identity", width = 0.5) +
   labs(title = "Proportion of respondents by type of seeds purchased",
        subtitle = "n baseline: 279, n endline:489",  y = element_blank()) +
   scale_fill_manual(values = c("#303434", "#00aeef"))+
@@ -308,10 +272,10 @@ df_type_seed_purchased %>%
   theme_bw() +
   geom_text(aes(label = scales::percent(perc_respondents/100, 
                                         accuracy = 1, trim = TRUE), vjust = -.5),
-            position = position_dodge2(width = .9)) +
+            position = position_dodge2(width = .5)) +
   theme(text= element_text(size= 12), legend.title= element_blank(), 
         panel.grid.major.y = element_blank(), panel.grid.major.x = element_blank(), 
-        axis.text.x = element_text(angle = 45,hjust= 1),
+        axis.text.x = element_text(angle = 45, hjust= 1),
         axis.title.x = element_blank(),
         axis.text.y = element_blank(),
         axis.ticks = element_blank())
@@ -341,9 +305,9 @@ df_cost_share_sources %>%
              y = perc_respondents)) +
 
   geom_bar(position = "dodge", stat = "identity") +
-  labs(title = "Proportion of respondents by main cost share sources for the seeds purchased",
+  labs(title = "Proportion of respondents by main finance source \n for seeds purchase",
        subtitle = "n baseline: 194, n endline:492") +
-  scale_fill_manual(values = c("#303434", "#00aeef"))+
+  scale_fill_manual(values = c("#303434", "#00aeef", width = .5))+
   theme_bw() +
   theme(text= element_text(size= 12), legend.title= element_blank(), 
         panel.grid.major.y = element_blank(), panel.grid.major.x = element_blank(), 
@@ -351,8 +315,8 @@ df_cost_share_sources %>%
         axis.title = element_blank())+
   labs(y = "Percentage  of respondents") +
   scale_y_continuous(labels = function(x) paste0(x, "%"), breaks = seq(0, 40, by = 5)) +
-coord_flip()                 
-  
+coord_flip()  +               
+scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 15))  
 
 
 # Respondents who used vouchers to access discounted inputs 
@@ -363,19 +327,18 @@ df_voucher_access <- tibble(phase = c("Baseline","Endline"),
 
 df_voucher_access%>% 
   ggplot(aes(fill = phase, x= fct_reorder(voucher_access, -perc_respondents), y= perc_respondents)) +
-  geom_bar(position = "dodge", stat = "identity") +
+  geom_bar(position = "dodge", stat = "identity", width = .5) +
   scale_fill_manual(values = c("#303434", "#00aeef"))+
   ylim(0, 80) +
   theme_bw() +
   geom_text(aes(label = scales::percent(perc_respondents/100, 
                                         accuracy = 1, trim = TRUE), vjust = -.5),
-            position = position_dodge2(width = .9)) +
+            position = position_dodge2(width = .5)) +
   theme(text= element_text(size= 12), legend.title= element_blank(), 
         panel.grid.major.y = element_blank(), panel.grid.major.x = element_blank(), 
-        axis.text.x = element_text(angle = 0,hjust= 1),
+        axis.text = element_blank(),
         axis.title.x = element_blank(),
         axis.ticks = element_blank(),
-        axis.text.y = element_blank(),
         axis.ticks.y = element_blank())+
   labs(title = "Proportion of respondents using paper or E-vouchers to access seeds",
        subtitle = "n baseline: 282, n endline:484", x= element_blank(),
@@ -390,20 +353,20 @@ df_extension_service_access <- tibble(phase = c("Baseline", "Endline"),
 
 df_extension_service_access %>% 
   ggplot(aes(fill = phase, x= fct_reorder(extension_service_access, -perc_respondents), y= perc_respondents)) +
-  geom_bar(position = "dodge", stat = "identity") +
+  geom_bar(position = "dodge", stat = "identity", width = .5) +
   scale_fill_manual(values = c("#303434", "#00aeef"))+
   ylim(0, 100) +
   theme_bw() +
   geom_text(aes(label = scales::percent(perc_respondents/100, 
                                         accuracy = 1, trim = TRUE), vjust = -.5),
-            position = position_dodge2(width = .9)) +
+            position = position_dodge2(width = .5)) +
   theme(text= element_text(size= 12), legend.title= element_blank(), 
         panel.grid.major.y = element_blank(), panel.grid.major.x = element_blank(), 
-        axis.text.x = element_text(angle = 0,hjust= 1),
+        axis.text = element_blank(),
         axis.title.x = element_blank(),
         axis.ticks = element_blank(),
         axis.text.y = element_blank())+
-  labs(title = "Proportion of farmers accessing agricultural extension services",
+  labs(title = "Proportion of respondents accessing agricultural extension services",
        subtitle = "n baseline: 321, n endline:526", x= element_blank(),
        y = element_blank())
 
@@ -435,7 +398,7 @@ df_extension_service_type %>%
              y = perc_respondents)) +
 
   geom_bar(position = "dodge", stat = "identity") +
-  labs(title = "Proportion of respondents by type of extension service accessed",
+  labs(title = "Proportion of respondents by type of extension \n service accessed",
        subtitle = "n baseline: 216, n endline:465") +
   scale_fill_manual(values = c("#303434", "#00aeef"))+
   theme_bw() +
@@ -445,7 +408,8 @@ df_extension_service_type %>%
         axis.title = element_blank())+
   labs(y = "Percentage  of respondents") +
   scale_y_continuous(labels = function(x) paste0(x, "%"), breaks = seq(0, 40, by = 5)) +
-  coord_flip()
+  coord_flip() +
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 15))
 
 
 # Innovation centers
@@ -489,10 +453,11 @@ df_ICs %>%
         panel.grid.major.y = element_blank(), panel.grid.major.x = element_blank(), 
         axis.text.y = element_text(angle = 0, hjust=1),
         axis.title = element_blank())+
-  labs(title= "Most mentioned services offered at the innovation centers by respondents", 
+  labs(title= "Most mentioned services offered at the innovation \n centers by respondents", 
        subtitle = "n baseline: 165, n endline:314", x= element_blank(), y = "Percentage  of respondents") +
   scale_y_continuous(labels = function(x) paste0(x, "%"), breaks = seq(0, 25, by = 5)) +
-  coord_flip()
+  coord_flip() +
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 20))
 
 # Awareness about existing innovation center services among targeted groups
 
@@ -503,48 +468,23 @@ df_ICs_awareness <- tibble(phase = c("Baseline", "Endline"),
 
 df_ICs_awareness %>% 
   ggplot(aes(fill = phase, x= fct_reorder(ICs_awareness, -perc_respondents), y= perc_respondents)) +
-  geom_bar(position = "dodge", stat = "identity") +
+  geom_bar(position = "dodge", stat = "identity", width = 0.5) +
   scale_fill_manual(values = c("#303434", "#00aeef"))+
   theme_bw() +
   geom_text(aes(label = scales::percent(perc_respondents/100, 
                                         accuracy = 1, trim = TRUE), vjust = -.5),
-            position = position_dodge2(width = .9)) +
+            position = position_dodge2(width = .5)) +
   theme(text= element_text(size= 12), legend.title= element_blank(), 
         panel.grid.major.y = element_blank(), panel.grid.major.x = element_blank(), 
         axis.text = element_blank(),
         axis.title.x = element_blank(),
         axis.ticks = element_blank())+
-  labs(title= "Proportion of respondents aware of the existence of the innovation centers", 
+  labs(title= "Proportion of respondents aware of the existence of the \n innovation centers", 
        subtitle = "n baseline: 443, n endline:214", x= element_blank(),
        y = element_blank()) 
 
 
-# Frequency of visits to the ICs by target group
-
-df_ICs_visit_freq <- tibble(phase = c("Baseline", "Endline", "Baseline", "Endline", "Baseline",
-                                      "Endline", "Baseline", "Endline", "Baseline", "Endline"),
-                            perc_respondents = c(16, 20, 29, 20, 0, 8, 1, 29, 3, 22),
-                            ICs_visit_freq = c("Daily", "Daily", "Weekly", "Weekly", "Bi-monthly", 
-                                               "Bi-monthly", "Monthly", "Monthly", "Others", "Others")
-                     )
-
-df_ICs_visit_freq %>% 
-  ggplot(aes(fill = ICs_visit_freq, x= phase, perc_respondents), 
-             y= perc_respondents)+
-  
-  geom_bar(position = "stack", stat = "identity") +
-  scale_fill_manual(values = c("#303434", "#00aeef", "#ffffff", "#e3dab8", "#e3dab8"))+
-  theme_bw()+
-  theme(text= element_text(size= 12), legend.title= element_blank(), 
-        panel.grid.major.y = element_blank(), panel.grid.major.x = element_blank(), 
-        axis.text.y = element_text(angle = 0, hjust=1),
-        axis.title.x = element_blank(),
-        axis.ticks.y = element_blank(),
-        axis.ticks = element_blank())+
-  labs(title= "ICs visit frequency distribution by target group", 
-       subtitle = "n baseline: 441, n endline:214", x= element_blank(),
-       y = "Percentage  of respondents") +
-  scale_y_continuous(labels = function(x) paste0(x, "%"), breaks = seq(0, 40, by = 5))
+# Frequency of visits to the ICs by target group _ not done as options of endline differ from baseline
   
 
 # Gender Integration
@@ -558,12 +498,12 @@ df_hh_decision_making <- tibble( phase= c("Baseline", "Endline", "Baseline", "En
 
 df_hh_decision_making %>% 
   ggplot(aes(fill = phase, x= fct_reorder(gender, -perc_respondents), y= perc_respondents)) +
-  geom_bar(position = "dodge", stat = "identity") +
+  geom_bar(position = "dodge", stat = "identity", width = 0.5) +
   scale_fill_manual(values = c("#303434", "#00aeef"))+
   theme_bw() +
   geom_text(aes(label = scales::percent(perc_respondents/100, 
                                         accuracy = 1, trim = TRUE), vjust = -.5),
-            position = position_dodge2(width = .9)) +
+            position = position_dodge2(width = .5)) +
   theme(text= element_text(size= 12), legend.title= element_blank(), 
         panel.grid.major.y = element_blank(), panel.grid.major.x = element_blank(), 
         axis.text.x = element_text(angle = 0,hjust= 1),
@@ -571,7 +511,7 @@ df_hh_decision_making %>%
         axis.text.y = element_blank(),
         axis.ticks.y = element_blank(),
         axis.ticks.x = element_blank())+
-  labs(title= "Proportion of respondents by women and men reporting in productive decisions' inputs", 
+  labs(title= "Proportion of respondents reporting participating in household \n productive decisions, by gender", 
        subtitle = "n baseline: 652, n endline:738", x= element_blank(),
        y = element_blank()) 
 
@@ -600,8 +540,8 @@ df_resources_dec_making %>%
         axis.text.y = element_blank(),
         axis.ticks.y = element_blank(),
         axis.ticks.x = element_blank())+
-  labs(title= "Proportion of respondents by decision making roles in the household about resource acces, 
-       utilization and ownership", subtitle = "n baseline: 652, n endline:738", x= element_blank(),
+  labs(title= "Proportion of respondents by decision-making roles within the \n household for resource access, utilization and ownership",
+        subtitle = "n baseline: 652, n endline:738", x= element_blank(),
        y = element_blank())
 
 
@@ -613,17 +553,16 @@ df_women_access <- tibble(phase = c("Baseline", "Endline"),
 
 df_women_access %>% 
   ggplot(aes(fill = phase, x= fct_reorder(women_access, -perc_respondents), y= perc_respondents)) +
-  geom_bar(position = "dodge", stat = "identity") +
+  geom_bar(position = "dodge", stat = "identity", width = .5) +
   scale_fill_manual(values = c("#303434", "#00aeef"))+
   theme_bw() +
   geom_text(aes(label = scales::percent(perc_respondents/100, 
                                         accuracy = 1, trim = TRUE), vjust = -.5),
-            position = position_dodge2(width = .9)) +
+            position = position_dodge2(width = .5)) +
   theme(text= element_text(size= 12), legend.title= element_blank(), 
         panel.grid.major.y = element_blank(), panel.grid.major.x = element_blank(), 
-        axis.text.x = element_text(angle = 0,hjust= 1),
+        axis.text = element_blank(),
         axis.title.x = element_blank(),
-        axis.text.y = element_blank(),
         axis.ticks = element_blank())+
   labs(title= "Proportion of women accessing agricultural extension services", 
        subtitle = "n baseline: 652, n endline:738", x= element_blank(),
@@ -644,10 +583,10 @@ df_women_limit_agric_services <- tibble(phase = c("Baseline", "Endline", "Baseli
 
 df_women_limit_agric_services %>% 
   arrange(perc_respondents) %>%
-  mutate(women_limit_agric_services = factor(women_limit_agric_services, levels=c("Illiteracy", "Lack of information",
-                                                                                  "Lack of time", "Too much work at home",
-                                                                                  "Lack of consent from their husbands",
-                                                                                  "Other"))) %>%
+  mutate(women_limit_agric_services = factor(women_limit_agric_services, levels=c("Other", "Lack of consent from their husbands",
+                                                                                  "Too much work at home", "Lack of time", "Lack of information",
+                                                                                  "Illiteracy"
+                                                                           ))) %>%
   
   ggplot(aes(fill = phase, x= women_limit_agric_services,
              y = perc_respondents)) +
@@ -658,14 +597,13 @@ geom_bar(position = "dodge", stat = "identity") +
   theme(text= element_text(size= 12), legend.title= element_blank(), 
         panel.grid.major.y = element_blank(), panel.grid.major.x = element_blank(), 
         axis.text.y = element_text(angle = 0, hjust=1),
-        axis.title.x = element_blank(),
-        axis.ticks.y = element_blank(),
-        axis.ticks = element_blank())+
-  labs(title= "Proportion of respondents by main factors limiting women's access to agricultural services", 
+        axis.title.x = element_blank())+
+  labs(title= "Proportion of respondents by factors limiting women's \n access to agricultural services", 
        subtitle = "n baseline: 132, n endline: 89", x= element_blank(),
        y = "Percentage  of respondents") +
   scale_y_continuous(labels = function(x) paste0(x, "%"), breaks = seq(0, 40, by = 5)) +
-  coord_flip()
+  coord_flip() +
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 15))
 
 # Farmers trained in agronomy management and land preparation 
 # advanced ggplot_not completed!
@@ -697,7 +635,7 @@ ggplot(df_agronomy_management, aes(x=status,  y=perc_respondents))+
         axis.text.y = element_text(angle = 0, hjust=1),
         axis.title.x = element_blank(),
         axis.ticks = element_blank())+
-  labs(title= "Gender distribution of trained farmers by community type in the three locations", 
+  labs(title= "Gender distribution of trained farmers by community type in the \n three locations", 
        subtitle = "n baseline: 320, n endline:527", x= element_blank(),
        y = element_blank()) +
   scale_y_continuous(labels = function(x) paste0(x, "%"), breaks = seq(0, 80, by = 10))
